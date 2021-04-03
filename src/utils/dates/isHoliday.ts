@@ -1,3 +1,9 @@
 import { Dayjs } from 'dayjs';
 
-export const isHoliday = (date: Dayjs) => date.day() === 0 || date.day() === 6;
+/**
+ * Checks if a day is a holiday
+ * @param date date to check
+ * @returns true if holiday
+ */
+export const isHoliday = (date: Dayjs): boolean =>
+  date.day() === 0 || date.day() === 6;

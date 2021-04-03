@@ -9,6 +9,9 @@ import { SpaceStyled } from './styles';
 import { FileOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 
+/**
+ * Configuration of the report panel
+ */
 export const ConfigPanel: FC<ConfigPanelProps> = ({
   data,
   headers,

@@ -1,39 +1,34 @@
 import { Table } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { getReport, ReportResult } from '../../services/getReport';
-
 import { ConfigPanel } from './ConfigPanel';
 import { ReportContentStyled, ReportTitleStyled } from './styles';
 import namesJSON from '../../names.json';
 import { Names } from './Names';
-import { useMemo } from 'react';
+import { useGetReport } from './hooks/useGetReport';
 
+/**
+ * Root component of the report page
+ */
 const Report: React.FC = () => {
+  /** current month */
   const [month, setMonth] = useState(dayjs());
 
+  /** names list to be included in the report */
   const [names, setNames] = useState<string[]>(namesJSON);
 
-  const report: ReportResult = useMemo(() => getReport(month, names), [
-    month,
-    names,
-  ]);
-
-  const previewColumns = report.headers.map((column) => ({
-    dataIndex: column.key,
-    title: column.label,
-  }));
-
-  const previewRows = report.data.map((row, key) => ({ ...row, key }));
-
-  console.log(previewRows);
+  const {
+    report: { data, headers },
+    previewColumns,
+    previewRows,
+  } = useGetReport(month, names);
 
   return (
     <ReportContentStyled>
       <ReportTitleStyled>Report configuration</ReportTitleStyled>
       <ConfigPanel
-        data={report?.data}
-        headers={report?.headers}
+        data={data}
+        headers={headers}
         month={month}
         setMonth={setMonth}
       />

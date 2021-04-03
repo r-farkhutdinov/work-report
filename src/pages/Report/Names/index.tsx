@@ -7,6 +7,9 @@ import {
   UserOutlinedStyled,
 } from './styles';
 
+/**
+ * List of the names to include in the report
+ */
 export const Names: FC<NamesProps> = ({ names, setNames }) => {
   const onSelectionChange = (checkedValues: any[]) => {
     setNames(checkedValues);
