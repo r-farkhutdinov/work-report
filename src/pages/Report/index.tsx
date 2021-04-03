@@ -1,44 +1,51 @@
+import { Table } from 'antd';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
 import { useState } from 'react';
 import { getReport, ReportResult } from '../../services/getReport';
-import { getDatesInRange } from '../../utils/dates/getDatesInRange';
+
 import { ConfigPanel } from './ConfigPanel';
 import { ReportContentStyled, ReportTitleStyled } from './styles';
-
-const headers = [
-  { label: 'First Name', key: 'firstname' },
-  { label: 'Last Name', key: 'lastname' },
-  { label: 'Email', key: 'email' },
-];
-
-const data = [
-  { firstname: 'Ahmed', lastname: 'Tomi', email: 'ah@smthing.co.com' },
-  { firstname: 'Raed', lastname: 'Labes', email: 'rl@smthing.co.com' },
-  { firstname: 'Yezzi', lastname: 'Min l3b', email: 'ymin@cocococo.com' },
-];
+import namesJSON from '../../names.json';
+import { Names } from './Names';
+import { useMemo } from 'react';
 
 const Report: React.FC = () => {
   const [month, setMonth] = useState(dayjs());
 
-  const names = ['Ruslan Farkhutdinov', 'Ivan Ivanov'];
+  const [names, setNames] = useState<string[]>(namesJSON);
 
-  const [report, setReport] = useState<ReportResult>();
+  const report: ReportResult = useMemo(() => getReport(month, names), [
+    month,
+    names,
+  ]);
 
-  useEffect(() => {
-    setReport(getReport(month, names));
-  }, [month]);
+  const previewColumns = report.headers.map((column) => ({
+    dataIndex: column.key,
+    title: column.label,
+  }));
 
-  console.log(report);
+  const previewRows = report.data.map((row, key) => ({ ...row, key }));
+
+  console.log(previewRows);
 
   return (
     <ReportContentStyled>
-      <ReportTitleStyled>Report</ReportTitleStyled>
+      <ReportTitleStyled>Report configuration</ReportTitleStyled>
       <ConfigPanel
         data={report?.data}
         headers={report?.headers}
         month={month}
         setMonth={setMonth}
+      />
+      <ReportTitleStyled>Names to include</ReportTitleStyled>
+
+      <Names names={namesJSON} setNames={setNames} />
+      <ReportTitleStyled>Preview</ReportTitleStyled>
+      <Table
+        size='small'
+        columns={previewColumns}
+        dataSource={previewRows}
+        pagination={false}
       />
     </ReportContentStyled>
   );

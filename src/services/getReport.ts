@@ -28,7 +28,7 @@ export const getReport = (month: Dayjs, names: string[]): ReportResult => {
 
   data.forEach((row) => {
     for (let date of dates) {
-      row[date.format('DD')] = isHoliday(date) ? 'X' : '+';
+      row[date.format('DD')] = isHoliday(date) ? 'x' : '+';
     }
   });
 
