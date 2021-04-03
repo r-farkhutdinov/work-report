@@ -2,9 +2,13 @@ import { FC } from 'react';
 import { CSVLink } from 'react-csv';
 import { ReportDownloadProps } from './interfaces';
 
-export const ReportDownload: FC<ReportDownloadProps> = ({ data, headers }) => {
+export const ReportDownload: FC<ReportDownloadProps> = ({
+  data,
+  headers,
+  filename,
+}) => {
   return (
-    <CSVLink data={data} headers={headers}>
+    <CSVLink filename={filename} data={data} headers={headers}>
       Download report
     </CSVLink>
   );

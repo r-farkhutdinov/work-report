@@ -1,3 +1,8 @@
+import dayjs from 'dayjs';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { getReport, ReportResult } from '../../services/getReport';
+import { getDatesInRange } from '../../utils/dates/getDatesInRange';
 import { ConfigPanel } from './ConfigPanel';
 import { ReportContentStyled, ReportTitleStyled } from './styles';
 
@@ -14,10 +19,27 @@ const data = [
 ];
 
 const Report: React.FC = () => {
+  const [month, setMonth] = useState(dayjs());
+
+  const names = ['Ruslan Farkhutdinov', 'Ivan Ivanov'];
+
+  const [report, setReport] = useState<ReportResult>();
+
+  useEffect(() => {
+    setReport(getReport(month, names));
+  }, [month]);
+
+  console.log(report);
+
   return (
     <ReportContentStyled>
       <ReportTitleStyled>Report</ReportTitleStyled>
-      <ConfigPanel data={data} headers={headers} />
+      <ConfigPanel
+        data={report?.data}
+        headers={report?.headers}
+        month={month}
+        setMonth={setMonth}
+      />
     </ReportContentStyled>
   );
 };
